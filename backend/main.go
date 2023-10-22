@@ -29,12 +29,5 @@ func main() {
 
 	routers.Initialize(app)
 
-	// Static Files
-	app.Get("/logo.svg", func(c *fiber.Ctx) error {
-		return c.SendFile("./public/logo.svg")
-	})
-	app.Static("/assets", "./public/assets")
-	app.Static("*", "./public/index.html")
-
 	log.Fatal(app.Listen(fmt.Sprintf(":%d", serverConf.Port)))
 }
