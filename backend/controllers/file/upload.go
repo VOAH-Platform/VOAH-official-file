@@ -49,14 +49,40 @@ func UploadFileCtrl(c *fiber.Ctx) error {
 		Processed: 1, // 1: Processing, 2: Processed, 3: Failed
 	}
 	db := database.DB
-	db.Create(&newFile)
+	err = db.Create(&newFile).Error
+	if err != nil {
+		return c.Status(500).JSON(fiber.Map{
+			"message": "Internal Server Error",
+		})
+	}
 
-	fileStoreConf := configs.Env.File
 	fileName := fmt.Sprintf("%d.blob", newFile.ID)
-	filePath := fmt.Sprintf("%s/%s", fileStoreConf.TempDataDir, fileName)
-	c.SaveFile(fileHeader, filePath)
+	var filePath string
+	if configs.Env.File.USE_S3 {
+		filePath = fmt.Sprintf("%s/%s", configs.Env.File.TempDataDir, fileName)
+	} else {
+		filePath = fmt.Sprintf("%s/%s", configs.Env.Server.DataDir, fileName)
+	}
 
-	go fileutil.SaveFilePermanently(filePath, fileName, newFile)
+	err = c.SaveFile(fileHeader, filePath)
+	if err != nil {
+		newFile.Processed = 3
+		db.Save(&newFile)
+		return c.Status(500).JSON(fiber.Map{
+			"message": "Internal Server Error",
+		})
+	}
+
+	if configs.Env.File.USE_S3 {
+		go fileutil.SaveFileToS3(filePath, fileName, newFile)
+	} else {
+		newFile.Processed = 2
+		if err = db.Save(&newFile).Error; err != nil {
+			return c.Status(500).JSON(fiber.Map{
+				"message": "Internal Server Error",
+			})
+		}
+	}
 
 	return c.JSON(fiber.Map{
 		"message": "File is on Processing",

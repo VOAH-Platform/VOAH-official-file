@@ -38,11 +38,11 @@ func LoadEnv() {
 			TempDataDir:     getEnvStr("FILE_TEMP_DATA_DIR", "./temp_data"),
 		},
 		Database: databaseEnv{
-			Host:     getEnvStr("DATABASE_HOST", "localhost"),
-			Port:     getEnvInt("DATABASE_PORT", 5432),
-			User:     getEnvStr("DATABASE_USER", "postgres"),
-			Password: getEnvStr("DATABASE_PASSWORD", "password"),
-			DBName:   getEnvStr("DATABASE_DBNAME", "voah-file"),
+			Host:     getEnvStr("DB_HOST", "localhost"),
+			Port:     getEnvInt("DB_PORT", 5432),
+			User:     getEnvStr("DB_USER", "postgres"),
+			Password: getEnvStr("DB_PASSWORD", "password"),
+			DBName:   getEnvStr("DB_NAME", "voah-file"),
 		},
 	}
 	if Env.File.USE_S3 {
