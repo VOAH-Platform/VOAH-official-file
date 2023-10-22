@@ -1,10 +1,10 @@
 package configs
 
 const (
-	ModuleID          = 0
-	ModuleName        = "VOAH-Template-Project"
+	ModuleID          = 2
+	ModuleName        = "VOAH-Official-File"
 	ModuleVersion     = "0.0.1"
-	ModuleDescription = "VOAH Template Project"
+	ModuleDescription = "VOAH Official File"
 )
 
 type ObjectType string
