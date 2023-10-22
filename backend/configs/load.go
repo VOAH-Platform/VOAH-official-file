@@ -1,8 +1,6 @@
 package configs
 
 import (
-	"encoding/json"
-	"fmt"
 	"os"
 	"strconv"
 )
@@ -32,15 +30,5 @@ func LoadEnv() {
 			CSRFOrigin: getEnvStr("SERVER_CSRF_ORIGIN", "*"),
 			DataDir:    getEnvStr("SERVER_DATA_DIR", "./data"),
 		},
-	}
-}
-
-func LoadSetting() {
-	jsonFile, err := os.ReadFile(fmt.Sprintf("%s/setting.json", Env.Server.DataDir))
-	if err != nil {
-		panic(err)
-	}
-	if err = json.Unmarshal(jsonFile, &Setting); err != nil {
-		panic(err)
 	}
 }

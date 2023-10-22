@@ -11,9 +11,8 @@ import (
 )
 
 func main() {
-	configs.LoadEnv()     // Load envs
-	configs.LoadSetting() // Load settings
-	logger.InitLogger()   // Intitialize logger
+	configs.LoadEnv()   // Load envs
+	logger.InitLogger() // Intitialize logger
 
 	serverConf := configs.Env.Server
 	log := logger.Logger
