@@ -1,34 +1,56 @@
 package configs
 
 import (
+	"fmt"
 	"os"
 	"strconv"
 )
 
-func getEnvStr(key string, defaultValue string) string {
-	value := os.Getenv(key)
+func getEnvStr(key string, defaultValue string) (value string) {
+	value = os.Getenv(key)
 	if value == "" {
+		fmt.Printf("Environment variable %s is not set, Keep Going with Default Value '%s' \n", key, defaultValue)
 		return defaultValue
 	}
-	return value
+	return
 }
 
-func getEnvInt(key string, defaultValue int) int {
-	value := getEnvStr(key, "")
+func getEnvInt(key string, defaultValue int) (intValue int) {
+	value := getEnvStr(key, strconv.Itoa(defaultValue))
 	intValue, err := strconv.Atoi(value)
 	if err != nil {
-		return defaultValue
+		panic(err)
 	}
-	return intValue
+	return
 }
 
 func LoadEnv() {
 	Env = &MainEnv{
 		Server: serverEnv{
-			HostURL:    getEnvStr("SERVER_HOST_URL", "http://localhost:3000"),
-			Port:       getEnvInt("SERVER_PORT", 3000),
+			HostURL:    getEnvStr("SERVER_HOST_URL", "http://localhost:3002"),
+			Port:       getEnvInt("SERVER_PORT", 3002),
 			CSRFOrigin: getEnvStr("SERVER_CSRF_ORIGIN", "*"),
 			DataDir:    getEnvStr("SERVER_DATA_DIR", "./data"),
 		},
+		File: fileStoreEnv{
+			USE_S3:          getEnvStr("FILE_USE_S3", "false") == "true",
+			FileSizeLimitMB: getEnvInt("FILE_SIZE_LIMIT_MB", 1024),
+			TempDataDir:     getEnvStr("FILE_TEMP_DATA_DIR", "./temp_data"),
+		},
+		Database: databaseEnv{
+			Host:     getEnvStr("DATABASE_HOST", "localhost"),
+			Port:     getEnvInt("DATABASE_PORT", 5432),
+			User:     getEnvStr("DATABASE_USER", "postgres"),
+			Password: getEnvStr("DATABASE_PASSWORD", "password"),
+			DBName:   getEnvStr("DATABASE_DBNAME", "voah-file"),
+		},
+	}
+	if Env.File.USE_S3 {
+		Env.File.S3 = s3Env{
+			AcessKeyID:      getEnvStr("FILE_S3_ACCESS_KEY_ID", ""),
+			SecretAccessKey: getEnvStr("FILE_S3_SECRET_ACCESS_KEY", ""),
+			Bucket:          getEnvStr("FILE_S3_BUCKET", ""),
+			Region:          getEnvStr("FILE_S3_REGION", ""),
+		}
 	}
 }

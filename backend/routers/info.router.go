@@ -2,7 +2,7 @@ package routers
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"implude.kr/VOAH-Template-Project/controllers/info"
+	"implude.kr/VOAH-Official-File/controllers/info"
 )
 
 func addInfo(router *fiber.App) {

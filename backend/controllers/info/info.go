@@ -3,7 +3,7 @@ package info
 import (
 	"github.com/gofiber/fiber/v2"
 	"golang.org/x/crypto/bcrypt"
-	"implude.kr/VOAH-Template-Project/configs"
+	"implude.kr/VOAH-Official-File/configs"
 )
 
 func GetInfoCtrl(c *fiber.Ctx) error {

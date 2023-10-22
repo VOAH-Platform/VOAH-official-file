@@ -1,0 +1,6 @@
+# backend
+
+backend/tmp
+backend/temp_data
+backend/data
+.DS_Store
