@@ -11,4 +11,7 @@ func addInfo(router *fiber.App) {
 	infoGroup.Get("", func(c *fiber.Ctx) error {
 		return info.GetInfoCtrl(c)
 	})
+	infoGroup.Get("/init", func(c *fiber.Ctx) error {
+		return info.InfoInitCtrl(c)
+	})
 }
