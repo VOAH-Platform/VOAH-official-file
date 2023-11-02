@@ -30,6 +30,7 @@ func LoadEnv() {
 			HostURL:    getEnvStr("SERVER_HOST_URL", "http://localhost:3002"),
 			Port:       getEnvInt("SERVER_PORT", 3002),
 			CSRFOrigin: getEnvStr("SERVER_CSRF_ORIGIN", "*"),
+			CoreAPIKey: getEnvStr("SERVER_CORE_API_KEY", "default"),
 			DataDir:    getEnvStr("SERVER_DATA_DIR", "./data"),
 		},
 		File: fileStoreEnv{
